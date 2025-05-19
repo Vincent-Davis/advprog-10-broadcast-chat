@@ -1,0 +1,6 @@
+# Commit 1
+![Chat Application Demo](img/commit_1.png)
+
+Seperti yang ditunjukkan pada gambar, saya telah menjalankan satu instance server dan tiga instance client secara bersamaan untuk mendemonstrasikan fungsionalitas aplikasi chat. Server berhasil menerima koneksi dari ketiga client dan menampilkan alamat IP serta port dari setiap koneksi yang masuk. Ketika pesan dikirim dari salah satu client, server akan menerimanya dan langsung menyebarkannya ke semua client yang terhubung, memungkinkan komunikasi real-time antar pengguna.
+
+Log server menampilkan informasi detail tentang aktivitas koneksi, termasuk waktu koneksi dibuat dan pesan-pesan yang diterima dari setiap client. Setiap client dapat melihat pesan yang dikirim oleh client lain berkat mekanisme broadcasting yang diimplementasikan menggunakan channel Tokio. Pendekatan asinkron memungkinkan server untuk menangani banyak koneksi secara efisien tanpa memblokir thread utama, sehingga aplikasi tetap responsif bahkan ketika jumlah client bertambah.
