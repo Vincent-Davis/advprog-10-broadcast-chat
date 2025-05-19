@@ -38,8 +38,11 @@ async fn handle_connection(
                         let text = msg.as_text().unwrap_or("").to_string();
                         println!("Received from {addr}: {text}");
                         
+                        // Add sender information to message
+                        let formatted_msg = format!("[{}] {}", addr, text);
+                        
                         // Broadcast to all subscribers
-                        let _ = bcast_tx.send(text);
+                        let _ = bcast_tx.send(formatted_msg);
                     } else if msg.is_close() {
                         break;
                     }
@@ -67,8 +70,8 @@ async fn handle_connection(
 async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
     let (bcast_tx, _) = channel(16);
 
-    let listener = TcpListener::bind("127.0.0.1:8000").await?;
-    println!("listening on port 8000");
+    let listener = TcpListener::bind("127.0.0.1:8080").await?;
+    println!("listening on port 8080");
 
     loop {
         let (socket, addr) = listener.accept().await?;

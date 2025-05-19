@@ -15,3 +15,20 @@ Untuk mengubah port aplikasi dari 2000 menjadi 8080, saya perlu memodifikasi dua
 2. Di file `client.rs`, saya mengubah URI koneksi dari "ws://127.0.0.1:2000" menjadi "ws://127.0.0.1:8080" pada kode yang membuat koneksi client. Perhatikan bahwa koneksi menggunakan protokol WebSocket yang ditandai dengan awalan "ws://" pada URI.
 
 Setelah modifikasi, aplikasi masih berjalan dengan baik. Server sekarang mendengarkan pada port 8080 dan client terhubung ke port yang sama. Komunikasi antara client dan server tetap berfungsi seperti sebelumnya, memungkinkan pesan dikirim dan diterima antara semua client yang terhubung.
+
+# Commit 3: Small Changes, Add IP and Port
+![Chat with Sender Info](img/commit_3.png)
+Untuk meningkatkan fungsionalitas aplikasi chat, saya melakukan modifikasi pada kode sehingga pesan yang dikirim akan disertai dengan informasi pengirim (alamat IP dan port):
+
+1. Di file `server.rs`, saya menambahkan informasi alamat pengirim pada pesan sebelum disebarkan:
+   ```rust
+   // Add sender information to message
+   let formatted_msg = format!("[{}] {}", addr, text);
+   
+   // Broadcast to all subscribers
+   let _ = bcast_tx.send(formatted_msg);
+   ```
+
+2. Di file `client.rs` tidak diperlukan perubahan khusus karena pesan yang diterima sudah diformat dengan informasi pengirim oleh server.
+
+Dengan modifikasi ini, setiap kali pesan dikirim, penerima dapat melihat siapa (alamat IP dan port) yang mengirim pesan tersebut. Hal ini memudahkan pengguna untuk mengidentifikasi sumber pesan dalam percakapan grup, terutama ketika ada banyak klien yang terhubung secara bersamaan. Pendekatan ini menambahkan konteks pada percakapan tanpa perlu mengimplementasikan sistem login atau nama pengguna. Selain itu, solusi ini juga sangat efisien dari segi sumber daya karena hanya memerlukan sedikit tambahan pemrosesan pada server tanpa menambah beban pada klien. Implementasi ini juga dapat dengan mudah diperluas di masa depan, misalnya dengan menambahkan fitur nickname atau avatar untuk identifikasi pengguna yang lebih personal.
